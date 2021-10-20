@@ -50,5 +50,11 @@
       "type": "composer",
       "url": "https://asset-packagist.org"
     }
-  ]
+  ],
+  "scripts": {
+    "phpcs": "phpcs --standard=PSR12"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^3.2"
+  }
 }
