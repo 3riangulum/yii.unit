@@ -3,7 +3,6 @@
 namespace Triangulum\Yii\Unit\Front;
 
 use Triangulum\Yii\Unit\Admittance\RouteBase;
-use Triangulum\Yii\Unit\Data\Db\Entity;
 use Triangulum\Yii\Unit\Front\Items\FrontGrid;
 use Triangulum\Yii\Unit\Front\Items\FrontSimple;
 
@@ -90,29 +89,29 @@ abstract class FrontCrud extends FrontBase
     {
         if (null === $this->viewer) {
             $this->viewer = $this
-                ->popupLoad(self::ALIAS_VIEWER)
+                ->uiUnitLoad(self::ALIAS_VIEWER)
                 ->setTitle($this->title);
         }
 
         return $this->viewer;
     }
 
-    public function editor(Entity $entity = null): FrontSimple
+    public function editor(): FrontSimple
     {
         if (null === $this->editor) {
             $this->editor = $this
-                ->popupSetup(self::ALIAS_EDITOR, $entity)
+                ->uiUnitLoad(self::ALIAS_EDITOR)
                 ->setTitle($this->titleEditor);
         }
 
         return $this->editor;
     }
 
-    public function creator(Entity $entity = null): FrontSimple
+    public function creator(): FrontSimple
     {
         if (null === $this->creator) {
             $this->creator = $this
-                ->popupSetup(self::ALIAS_CREATOR, $entity)
+                ->uiUnitLoad(self::ALIAS_CREATOR)
                 ->setTitle($this->titleCreator);
         }
 
@@ -123,33 +122,21 @@ abstract class FrontCrud extends FrontBase
     {
         if (null === $this->eraser) {
             $this->eraser = $this
-                ->popupSetup(self::ALIAS_ERASER)
+                ->uiUnitLoad(self::ALIAS_ERASER)
                 ->setTitle($this->titleEraser);
         }
 
         return $this->eraser;
     }
 
-    public function duplicator(Entity $entity = null): FrontSimple
+    public function duplicator(): FrontSimple
     {
         if (null === $this->duplicator) {
             $this->duplicator = $this
-                ->popupSetup(self::ALIAS_DUPLICATOR, $entity)
+                ->uiUnitLoad(self::ALIAS_DUPLICATOR)
                 ->setTitle($this->titleDuplicator);
         }
 
         return $this->duplicator;
-    }
-
-    private function popupSetup(string $alias, Entity $entity = null): FrontSimple
-    {
-        $element = $this->popupLoad($alias);
-        if ($entity && null !== $entity) {
-            $element
-                ->setPk($entity->pkGet())
-                ->setHasError($entity->hasErrors());
-        }
-
-        return $element;
     }
 }

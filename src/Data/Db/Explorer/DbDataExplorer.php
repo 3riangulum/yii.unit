@@ -1,9 +1,10 @@
 <?php
 
-namespace Triangulum\Yii\Unit\Data\Db;
+namespace Triangulum\Yii\Unit\Data\Db\Explorer;
 
 use Triangulum\Yii\Unit\Data\DataBasic;
 use Triangulum\Yii\Unit\Data\DataExplorer;
+use Triangulum\Yii\Unit\Data\Db\DbRepository;
 use Triangulum\Yii\Unit\Data\Db\Query\QueryBase;
 use Yii;
 use yii\data\ArrayDataProvider;

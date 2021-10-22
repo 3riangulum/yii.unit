@@ -4,7 +4,7 @@ namespace Triangulum\Yii\Unit\Front\Items;
 
 use Closure;
 use Triangulum\Yii\Unit\Front\FrontBase;
-use Triangulum\Yii\Unit\Html\Label;
+use Triangulum\Yii\Unit\Html\Label\Label;
 use Triangulum\Yii\Unit\Html\Panel\PanelGrid;
 use Yii;
 use yii\base\Model;

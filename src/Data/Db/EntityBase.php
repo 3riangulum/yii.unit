@@ -2,10 +2,13 @@
 
 namespace Triangulum\Yii\Unit\Data\Db;
 
+use Triangulum\Yii\Unit\Data\DataHandler;
 use yii\db\ActiveRecord;
 
 abstract class EntityBase extends ActiveRecord implements Entity
 {
+    use DataHandler;
+
     protected bool $dbSingleTransaction = true;
 
     public function transactions(): array
@@ -17,17 +20,6 @@ abstract class EntityBase extends ActiveRecord implements Entity
         }
 
         return [];
-    }
-
-    public function exportAttributes(array $exclude = []): array
-    {
-        $data = $this->getAttributes();
-
-        foreach ($exclude as $attribute) {
-            unset($data[$attribute]);
-        }
-
-        return $data;
     }
 
     public function disableDbSingleTransaction(): void

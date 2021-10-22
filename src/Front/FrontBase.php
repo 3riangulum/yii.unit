@@ -51,7 +51,7 @@ abstract class FrontBase implements Front
         return $this->actionConfig()[$alias]['allowAction'] ?? false;
     }
 
-    protected function popupLoad(string $alias): FrontSimple
+    protected function uiUnitLoad(string $alias): FrontSimple
     {
         return FrontSimple::builder($this->actionConfig()[$alias]);
     }

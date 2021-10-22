@@ -1,6 +1,6 @@
 <?php
 
-namespace Triangulum\Yii\Unit\Html;
+namespace Triangulum\Yii\Unit\Html\Label;
 
 final class Label
 {
