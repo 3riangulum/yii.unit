@@ -16,6 +16,7 @@ abstract class FrontBase implements Front
     public const ALIAS_ERASER     = 'eraser';
     public const ALIAS_VIEWER     = 'viewer';
 
+    protected string     $title              = '';
     protected ?string    $gridSortableAction = null;
     protected bool       $gridFilterEnable   = true;
     protected ?string    $gridClass          = null;
@@ -34,6 +35,11 @@ abstract class FrontBase implements Front
     public static function build(): self
     {
         return Yii::createObject(static::class);
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
     }
 
     public function template(string $template): string
@@ -55,7 +61,7 @@ abstract class FrontBase implements Front
     {
         return FrontSimple::builder($this->actionConfig()[$alias]);
     }
-//
+
 //    protected function autocompleteGrid(Model $model, string $attribute): AutoCompleteSelectGrid
 //    {
 //        return AutoCompleteSelectGrid::builder([

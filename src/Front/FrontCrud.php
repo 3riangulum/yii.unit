@@ -11,7 +11,6 @@ use Triangulum\Yii\Unit\Front\Items\FrontSimple;
  */
 abstract class FrontCrud extends FrontBase
 {
-    protected string $title           = '';
     protected string $titleGrid       = '';
     protected string $titleEditor     = '';
     protected string $titleCreator    = '';

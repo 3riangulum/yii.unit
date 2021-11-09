@@ -1,6 +1,6 @@
 <?php
 
-namespace Triangulum\Yii\Unit;
+namespace Triangulum\Yii\Unit\Controller;
 
 use Throwable;
 use Triangulum\Yii\Unit\Admittance\RouteBase;
@@ -13,7 +13,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class ControllerBase extends Controller
+class ControllerWeb extends Controller
 {
     protected string $uri                   = '';
     protected array  $csrfValidationExclude = [];

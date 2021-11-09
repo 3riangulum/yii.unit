@@ -18,6 +18,11 @@ class FrontItem
         return $this;
     }
 
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
     public function extractAction(): string
     {
         $list = explode('/', $this->route());

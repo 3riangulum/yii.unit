@@ -3,6 +3,7 @@
 namespace Triangulum\Yii\Unit\Front\Items;
 
 use Closure;
+use Triangulum\Yii\Unit\Data\DataExplorer;
 use Triangulum\Yii\Unit\Front\FrontBase;
 use Triangulum\Yii\Unit\Html\Label\Label;
 use Triangulum\Yii\Unit\Html\Panel\PanelGrid;
@@ -51,9 +52,19 @@ abstract class FrontGrid extends FrontItem
         return Yii::createObject($config);
     }
 
-    abstract protected function gridViewRowOptions(): Closure;
+    abstract protected function gridViewColumnsConfig(DataExplorer $dataExplorer = null): array;
 
-    abstract protected function gridViewColumnsConfig(Model $searchModel = null): array;
+    protected function gridViewRowOptions(): Closure
+    {
+        return static function (Model $model) {
+            return [
+                'data'  => [
+                    'id' => $model->pkGet(),
+                ],
+                'class' => ['tr-' . $model->pkGet()],
+            ];
+        };
+    }
 
     public function render(): void
     {

@@ -16,9 +16,13 @@ abstract class DbDataExplorer extends DataBasic implements DataExplorer
     protected string        $gridSearchFormAlias = '';
     protected array         $gridSearchParams    = [];
 
-    public static function build(): self
+    public static function build(array $config = []): self
     {
-        return Yii::createObject(['class' => static::class]);
+        if (empty($config['class'])) {
+            $config['class'] = static::class;
+        }
+
+        return Yii::createObject($config);
     }
 
     public function loadParams(array $searchParams): bool

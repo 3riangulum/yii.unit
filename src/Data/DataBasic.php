@@ -2,6 +2,7 @@
 
 namespace Triangulum\Yii\Unit\Data;
 
+use DomainException;
 use ReflectionClass;
 use yii\base\Model;
 use yii\helpers\Html;
@@ -10,18 +11,21 @@ class DataBasic extends Model
 {
     use DataHandler;
 
-    public static function extractPost(array $postData, string $attribute = null)
+    public static function extractPost(array $postData, string $attribute = null, bool $throw = true)
     {
         $data = $postData[static::getInputName()] ?? [];
-
         if (empty($attribute)) {
             return $data;
+        }
+
+        if (!isset($data[$attribute]) && $throw) {
+            throw new DomainException('Attribute is not present in POST request');
         }
 
         return $data[$attribute] ?? null;
     }
 
-    protected function getInputId(string $attribute): string
+    public function getInputId(string $attribute): string
     {
         return Html::getInputId($this, $attribute);
     }
