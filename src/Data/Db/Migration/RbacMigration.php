@@ -6,7 +6,7 @@ use yii\db\Migration;
 
 class RbacMigration extends Migration
 {
-    protected string $role                      = 'root';
+    protected array  $roleList                  = ['root'];
     protected int    $authType                  = 2;
     protected string $authItemTable             = 'auth_item';
     protected string $authItemChildTable        = 'auth_item_child';
@@ -63,7 +63,9 @@ class RbacMigration extends Migration
     {
         $data = [];
         foreach ($this->authItemData as $route => $description) {
-            $data[] = [$this->role, $route];
+            foreach ($this->roleList as $role) {
+                $data[] = [$role, $route];
+            }
         }
 
         return $data;
