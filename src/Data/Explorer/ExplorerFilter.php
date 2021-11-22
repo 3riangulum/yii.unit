@@ -34,7 +34,7 @@ trait ExplorerFilter
         $options['class'] = ($options['class'] ?? '') . ' ' . $this->elementClass;
 
         return Html::dropDownList(
-            self::getInputName($name),
+            $this->getInputName($name),
             $this->getFilterValidatedValue($name, $default),
             $items,
             $options
@@ -46,7 +46,7 @@ trait ExplorerFilter
         $options['class'] = ($options['class'] ?? '') . ' ' . $this->elementClass;
 
         return Html::textInput(
-            $this->getFilterInputName($name),
+            $this->getInputName($name),
             $this->getFilterValidatedValue($name, $default),
             $options
         );
@@ -55,8 +55,8 @@ trait ExplorerFilter
     public function datePickerFilter(string $field, string $placeHolder = ''): string
     {
         return DatePicker::widget([
-            'id'            => 'dp_' . $this->getFormAlias() . '_' . $field,
-            'name'          => $this->getFilterInputName($field),
+            'id'            => 'dp_' . $this->formName() . '_' . $field,
+            'name'          => $this->getInputName($field),
             'layout'        => '{input}{remove}',
             'value'         => substr(trim($this->getFilterValidatedValue($field)), 0, 10),
             'type'          => DatePicker::TYPE_COMPONENT_PREPEND,
@@ -83,11 +83,21 @@ trait ExplorerFilter
         return $ret;
     }
 
+    /**
+     * @param string $alias
+     * @param mixed  $default
+     * @return mixed
+     */
+    private function getFilterValidatedValue(string $alias, $default = null)
+    {
+        return isset($this->$alias) && !empty($this->$alias) ? $this->$alias : $default;
+    }
+
     public function dateTimePickerFilterActive(string $field, string $placeHolder = '', bool $start = true): string
     {
         return DateTimePicker::widget([
-            'id'            => 'dp_' . $this->getFormAlias() . '_' . $field,
-            'name'          => $this->getFilterInputName($field),
+            'id'            => 'dp_' . $this->formName() . '_' . $field,
+            'name'          => $this->getInputName($field),
             'layout'        => '{input}{remove}',
             'value'         => substr(trim($this->getFilterValidatedValue($field)), 0, 20),
             'type'          => DateTimePicker::TYPE_COMPONENT_PREPEND,
