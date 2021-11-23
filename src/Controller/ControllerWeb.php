@@ -4,6 +4,7 @@ namespace Triangulum\Yii\Unit\Controller;
 
 use Throwable;
 use Triangulum\Yii\Unit\Admittance\RouteBase;
+use Triangulum\Yii\Unit\Data\Db\DbRepositoryAbstract;
 use Triangulum\Yii\Unit\Front\Front;
 use Yii;
 use yii\filters\AccessControl;
@@ -20,12 +21,23 @@ class ControllerWeb extends Controller
     protected array  $jsonResponse          = [];
     protected array  $accessRules           = [];
     protected array  $verbActions           = [];
-    protected ?Front $front                 = null;
-    protected string $frontClass            = '';
+
+    protected ?Front $front      = null;
+    protected string $frontClass = '';
+
+    protected ?DbRepositoryAbstract $repository      = null;
+    protected string                $repositoryClass = '';
 
     public function init()
     {
         parent::init();
+
+        if (!empty($this->repositoryClass)) {
+            /** @var DbRepositoryAbstract $repositoryClass */
+            $repositoryClass = $this->repositoryClass;
+            $this->repository = $repositoryClass::build();
+        }
+
         if (!empty($this->frontClass)) {
             /** @var Front $frontClass */
             $frontClass = $this->frontClass;
