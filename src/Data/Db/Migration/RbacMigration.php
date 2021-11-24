@@ -3,44 +3,93 @@
 namespace Triangulum\Yii\Unit\Data\Db\Migration;
 
 use yii\db\Migration;
+use yii\rbac\Item;
 
 class RbacMigration extends Migration
 {
-    protected array  $roleList                  = ['root'];
-    protected int    $authType                  = 2;
-    protected string $authItemTable             = 'auth_item';
-    protected string $authItemChildTable        = 'auth_item_child';
-    protected array  $authItemColumns           = [
+    protected array $roleList = ['root'];
+
+    protected string $authItemTable      = 'auth_item';
+    protected string $authItemChildTable = 'auth_item_child';
+    protected array  $authItemColumns    = [
         'name',
         'type',
         'description',
         'created_at',
         'updated_at',
     ];
-    protected array  $authItemChildTableColumns = [
+
+    protected array $authItemChildTableColumns = [
         'parent',
         'child',
     ];
 
-    protected array $authItemData = [];
+    protected array $permissionCreateMap = [];
+    protected array $roleCreateMap       = [];
 
     public function safeDown()
     {
         $this->delete($this->authItemTable, [
             'IN',
             'name',
-            array_keys($this->authItemData),
+            array_keys($this->permissionCreateMap),
         ]);
+
+        if (!empty($roleCreateMap)) {
+            $this->delete($this->authItemTable, [
+                'IN',
+                'name',
+                array_keys($this->roleCreateMap),
+            ]);
+        }
     }
 
     public function safeUp()
     {
+        $this->createPermissions();
+        $this->createRoles();
+        $this->bindPermissionsToRoles();
+    }
+
+    protected function createPermissions(): void
+    {
         $this->batchInsert(
             $this->authItemTable,
             $this->authItemColumns,
-            $this->prepareItemData()
+            $this->prepareItemData($this->permissionCreateMap, Item::TYPE_PERMISSION)
+        );
+    }
+
+    protected function prepareItemData($dataMap, int $type): array
+    {
+        $t = time();
+        $data = [];
+        foreach ($dataMap as $route => $description) {
+            $data[] = [$route, $type, $description, $t, $t];
+        }
+
+        return $data;
+    }
+
+    protected function createRoles(): void
+    {
+        if (empty($this->roleCreateMap)) {
+            return;
+        }
+
+        $this->batchInsert(
+            $this->authItemTable,
+            $this->authItemColumns,
+            $this->prepareItemData($this->roleCreateMap, Item::TYPE_ROLE)
         );
 
+        foreach (array_keys($this->roleCreateMap) as $role) {
+            $this->roleList[] = $role;
+        }
+    }
+
+    protected function bindPermissionsToRoles(): void
+    {
         $this->batchInsert(
             $this->authItemChildTable,
             $this->authItemChildTableColumns,
@@ -48,21 +97,10 @@ class RbacMigration extends Migration
         );
     }
 
-    protected function prepareItemData(): array
-    {
-        $t = time();
-        $data = [];
-        foreach ($this->authItemData as $route => $description) {
-            $data[] = [$route, $this->authType, $description, $t, $t];
-        }
-
-        return $data;
-    }
-
     protected function prepareItemChildData(): array
     {
         $data = [];
-        foreach ($this->authItemData as $route => $description) {
+        foreach ($this->permissionCreateMap as $route => $description) {
             foreach ($this->roleList as $role) {
                 $data[] = [$role, $route];
             }
