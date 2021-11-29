@@ -8,7 +8,7 @@ use Yii;
 final class EmailShield
 {
     protected float       $ratio            = 0.3;
-    protected string      $permission       = 'email-address-display';
+    protected string      $permission       = 'allow-display-full-email';
     protected ?Admittance $admittance       = null;
     private bool          $allowFullAddress = false;
 
@@ -23,25 +23,37 @@ final class EmailShield
         return Yii::createObject(self::class);
     }
 
-    public function get(string $email = null, string $replace = '*'): string
+    public function isAllowed(): bool
     {
-        return $this->allowFullAddress ? $email : $this->partial($email, $replace);
+        return $this->allowFullAddress;
     }
 
-    public function partial(string $email = null, string $replace = '*'): string
+    public function recast(string $email = null, string $replace = '*'): string
     {
-        if (empty($email)) {
+        return $this->isAllowed() ? $email : $this->obscure($email, $replace);
+    }
+
+    public function obscure(string $text = null, string $replace = '*'): string
+    {
+        if (empty($text)) {
             return '';
         }
 
-        $parts = explode('@', $email);
-        if (count($parts) !== 2) {
-            return $email;
+        preg_match_all('/(\S+)(@(\S+))/u', $text, $match);
+        if (empty($match[0]) || count($match) !== 4) {
+            return $text;
         }
 
-        $cutLen = strlen($parts[0]) * $this->ratio;
+        [$emailList, $prefixList, $domainList] = $match;
 
-        return substr($parts[0], 0, -ceil($cutLen)) . $replace . '@' . $parts[1];
+        foreach ($emailList as $i => $email) {
+            $cutLen = strlen($prefixList[$i]) * $this->ratio;
+            $partialEmail = substr($prefixList[$i], 0, -ceil($cutLen)) . $replace . $domainList[$i];
+
+            $text = str_replace($email, $partialEmail, $text);
+        }
+
+        return $text;
     }
 
     public function setRatio(float $ratio): void

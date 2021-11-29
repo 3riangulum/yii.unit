@@ -8,11 +8,15 @@ use Triangulum\Yii\Unit\Html\Panel\PanelBase;
 use Yii;
 use yii\base\Widget;
 use yii\bootstrap\Modal;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\web\View;
 use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 
+/**
+ * @todo replace Growl::... with alertSuccess/alertWarning
+ */
 class FrontSimple extends FrontItem
 {
     public string     $actionDelete       = '';
@@ -23,6 +27,7 @@ class FrontSimple extends FrontItem
     public ?bool      $pjaxLinkSelector   = false;
     public ?PanelBase $panel              = null;
     public ?int       $pk                 = null;
+    public array      $pjaxConfig         = [];
 
     protected bool $hasError = true;
 
@@ -80,17 +85,26 @@ class FrontSimple extends FrontItem
         Pjax::begin($this->pjaxConfig($hasError));
     }
 
-    protected function pjaxConfig(bool $hasErrors): array
+    protected function pjaxDefaultConfig(): array
     {
         return [
             'id'            => $this->pjaxId(),
-            'formSelector'  => $hasErrors ? false : null,
+            'formSelector'  => null,
             'linkSelector'  => $this->pjaxLinkSelector,
             'clientOptions' => ['skipOuterContainers' => true],
         ];
     }
 
-    protected function pjaxId(): string
+    protected function pjaxConfig(bool $hasErrors): array
+    {
+        return ArrayHelper::merge(
+            $this->pjaxDefaultConfig(),
+            ['formSelector' => $hasErrors ? false : null],
+            $this->pjaxConfig
+        );
+    }
+
+    public function pjaxId(): string
     {
         if (empty($this->pjaxId)) {
             $this->pjaxId = $this->containerClass() . '_pjax' . time();
@@ -239,6 +253,25 @@ JS;
                     ],
                 ]
             ) : '';
+    }
+
+    public function alert(string $msg, bool $success = null, string $title = null): void
+    {
+        if ($success === true) {
+            $this->alertSuccess($msg, $title);
+        } elseif ($success === false) {
+            $this->alertWarning($msg, $title);
+        }
+    }
+
+    public function alertSuccess(string $msg, string $title = null): void
+    {
+        Growl::growlOk($title ?? $this->getTitle(), $msg);
+    }
+
+    public function alertWarning(string $msg, string $title = null): void
+    {
+        Growl::growlError($title ?? $this->getTitle(), $msg);
     }
 
     public function reloadGrid(View $view, string $growlTitle, string $growlMsg = 'The operation was successful', bool $success = true): void
