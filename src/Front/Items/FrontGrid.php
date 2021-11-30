@@ -132,6 +132,11 @@ abstract class FrontGrid extends FrontItem
         $this->searchModel = $searchModel;
     }
 
+    public function searchModelGet(): ?Model
+    {
+        return $this->searchModel;
+    }
+
     public function dataProviderSet($dataProvider): void
     {
         $this->dataProvider = $dataProvider;
