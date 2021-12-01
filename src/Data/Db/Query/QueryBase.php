@@ -303,6 +303,16 @@ class QueryBase extends ActiveQuery
      * @param mixed  $value
      * {@inheritdoc}
      */
+    public function andFilterWhereFieldNotIn(string $field, $value)
+    {
+        return $this->andFilterWhere(['NOT IN', $field, $value]);
+    }
+
+    /**
+     * @param string $field
+     * @param mixed  $value
+     * {@inheritdoc}
+     */
     public function andWhereFieldGtE(string $field, $value)
     {
         return $this->andWhere(['>=', $field, $value]);
