@@ -23,11 +23,12 @@ final class Dropdown
             'attribute'     => $field,
             'theme'         => Select2::THEME_BOOTSTRAP,
             'showToggleAll' => false,
+            'maintainOrder' => true,
             'initValueText' => $selected,
             'options'       => [
                 'placeholder' => '',
             ],
-            'hideSearch'    => true,
+            'hideSearch'    => false,
             'pluginOptions' => [
                 'allowClear'   => true,
                 'data'         => $items,
@@ -36,9 +37,14 @@ final class Dropdown
         ]);
     }
 
-    public static function formElement(ActiveForm $form, $model, string $attribute, FilterDropDown $filter): ActiveField
-    {
-        $config = self::config();
+    public static function formElement(
+        ActiveForm     $form,
+        $model,
+        string         $attribute,
+        FilterDropDown $filter,
+        bool           $randomId = false
+    ): ActiveField {
+        $config = self::config($randomId);
         $config['initValueText'] = $filter->label($model->{$attribute});
         $config['pluginOptions']['data'] = $filter->items();
 
@@ -72,9 +78,9 @@ final class Dropdown
             ->widget(Select2::class, $config);
     }
 
-    private static function config(): array
+    private static function config(bool $randomId = false): array
     {
-        return [
+        $config = [
             'theme'         => Select2::THEME_BOOTSTRAP,
             'language'      => 'en',
             'showToggleAll' => false,
@@ -88,5 +94,11 @@ final class Dropdown
                 'title'        => '',
             ],
         ];
+
+        if ($randomId) {
+            $config['options']['id'] = mt_rand();
+        }
+
+        return $config;
     }
 }

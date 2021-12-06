@@ -20,6 +20,7 @@
     "ext-json": "*",
     "ext-mbstring": "*",
     "ext-pdo": "*",
+    "antic-droid/yii2-elasticsearch": "dev-master",
     "antic-droid/yii2-sortable-grid-view-widget": "dev-master",
     "bookin/yii2-awesome-bootstrap-checkbox": "dev-master",
     "kartik-v/yii2-widget-datepicker": "^1.4@dev",
