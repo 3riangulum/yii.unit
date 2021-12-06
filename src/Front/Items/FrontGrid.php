@@ -21,6 +21,7 @@ abstract class FrontGrid extends FrontItem
     public string     $gridId             = '';
     public array      $gridActionColumn   = [];
     public array      $invisibleColumn    = [];
+    public array      $hiddenColumn       = [];
     public string     $caption            = '';
     public array      $captionOptions     = [];
     public bool       $borderLess         = true;
@@ -28,6 +29,7 @@ abstract class FrontGrid extends FrontItem
     public ?PanelGrid $panel              = null;
     public string     $gridWidgetClass    = GridView::class;
     public string     $title              = '';
+    public $filterUrl          = '';
 
     protected ?BaseDataProvider $dataProvider  = null;
     protected ?Model            $searchModel   = null;
@@ -301,6 +303,7 @@ JS
 
         $config['caption'] = $this->caption;
         $config['captionOptions'] = $this->captionOptions;
+        $config['filterUrl'] = $this->filterUrl;
 
         return $config;
     }
@@ -374,5 +377,14 @@ JS
     public function setInvisibleColumn(array $invisibleColumn): void
     {
         $this->invisibleColumn = $invisibleColumn;
+    }
+
+    protected function getHiddenClass(string $attribute): string
+    {
+        if (empty($this->hiddenColumn)) {
+            return true;
+        }
+
+        return !in_array($attribute, $this->hiddenColumn, true) ? '' : 'hidden';
     }
 }

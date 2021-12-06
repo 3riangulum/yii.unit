@@ -109,8 +109,10 @@ final class FrontConfig
         return $this->tagFilter($this->router->unitAlias()) . '_' . ($gridId ?? '');
     }
 
-    public function export(): array
+    public function export(string $alias = ''): array
     {
-        return $this->actionConfig;
+        return empty($alias) ?
+            $this->actionConfig :
+            ($this->actionConfig[$alias] ?? []);
     }
 }

@@ -15,6 +15,7 @@ abstract class DataExplorerBase extends DataBasic implements DataExplorer
     protected array       $gridSearchParams    = [];
     protected ?array      $sort                = null;
     protected ?Pagination $pagination          = null;
+    public ?string        $route               = null;
 
     public static function build(array $config = []): self
     {
@@ -51,9 +52,15 @@ abstract class DataExplorerBase extends DataBasic implements DataExplorer
         $cfg = ['query' => $this->getQuery()];
         if (null !== $this->sort) {
             $cfg['sort'] = $this->sort;
+            if (!empty($this->route)) {
+                $cfg['sort']['route'] = $this->route;
+            }
         }
 
         if (null !== $this->pagination) {
+            if (!empty($this->route)) {
+                $this->pagination->route = $this->route;
+            }
             $cfg['pagination'] = $this->pagination;
         }
 
