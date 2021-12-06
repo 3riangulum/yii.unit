@@ -42,10 +42,10 @@ final class FrontConfig
         return $this;
     }
 
-    public function buildGrid(string $alias, string $action, string $title = ''): self
+    public function buildGrid(string $alias, string $action, string $title = '', array $uri = []): self
     {
         $this->actionConfig[$alias] = [
-            'route'       => $this->router->route($action),
+            'route'       => $this->router->route($action, $uri),
             'allowAction' => $this->router->isAllowed($action),
             'gridId'      => $this->gridTag(),
             'class'       => $this->gridClass,
