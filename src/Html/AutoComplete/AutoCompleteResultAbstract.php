@@ -7,11 +7,6 @@ use yii\helpers\HtmlPurifier;
 
 abstract class AutoCompleteResultAbstract
 {
-    /**
-     * @var mixed
-     */
-    public $pk = null;
-
     public string $term  = '';
     public bool   $valid = false;
     public int    $limit = 30;
@@ -34,7 +29,7 @@ abstract class AutoCompleteResultAbstract
 
     abstract public function label($data): string;
 
-    abstract public function loadSelected(): ?string;
+    abstract public function loadSelected(int $pk = null): ?string;
 
     abstract protected function decorate(array $list): array;
 
