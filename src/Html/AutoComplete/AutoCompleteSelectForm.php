@@ -6,6 +6,9 @@ use kartik\select2\Select2;
 use yii\widgets\ActiveField;
 use yii\widgets\ActiveForm;
 
+/**
+ * @method static self build(array $params = [])
+ */
 class AutoCompleteSelectForm extends AutoCompleteSelectAbstract
 {
     public ?ActiveForm $form = null;

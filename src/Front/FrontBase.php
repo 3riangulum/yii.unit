@@ -5,7 +5,9 @@ namespace Triangulum\Yii\Unit\Front;
 use Triangulum\Yii\Unit\Admittance\RouteBase;
 use Triangulum\Yii\Unit\Data\DataExplorer;
 use Triangulum\Yii\Unit\Front\Items\FrontSimple;
+use Triangulum\Yii\Unit\Html\AutoComplete\AutoCompleteSelectGrid;
 use Yii;
+use yii\base\Model;
 
 abstract class FrontBase implements Front
 {
@@ -62,11 +64,11 @@ abstract class FrontBase implements Front
         return FrontSimple::builder($this->actionConfig()[$alias]);
     }
 
-//    protected function autocompleteGrid(Model $model, string $attribute): AutoCompleteSelectGrid
-//    {
-//        return AutoCompleteSelectGrid::builder([
-//            'model'     => $model,
-//            'attribute' => $attribute,
-//        ]);
-//    }
+    protected function autocompleteGrid(Model $model, string $attribute): AutoCompleteSelectGrid
+    {
+        return AutoCompleteSelectGrid::build([
+            'model'     => $model,
+            'attribute' => $attribute,
+        ]);
+    }
 }
