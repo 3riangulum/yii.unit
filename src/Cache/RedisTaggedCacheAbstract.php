@@ -4,6 +4,7 @@ namespace Triangulum\Yii\Unit\Cache;
 
 use Closure;
 use Yii;
+use yii\caching\CacheInterface;
 use yii\caching\TagDependency;
 
 abstract class RedisTaggedCacheAbstract implements RedisTaggedCache
@@ -23,39 +24,48 @@ abstract class RedisTaggedCacheAbstract implements RedisTaggedCache
     public function invalidate(): void
     {
         TagDependency::invalidate(
-            Yii::$app->get($this->cacheAlias),
+            $this->cache(),
             $this->getTag()
         );
     }
 
     public function getOrSet(array $key, Closure $callable, $duration = null)
     {
-        return Yii::$app
-            ->get($this->cacheAlias)
-            ->getOrSet(
-                $key,
-                $callable,
-                $duration,
-                $this->getDependency()
-            );
+        return $this->cache()->getOrSet(
+            $key,
+            $callable,
+            $duration,
+            $this->getDependency()
+        );
     }
 
     public function get(array $key)
     {
-        return Yii::$app
-            ->get($this->cacheAlias)
-            ->get($key);
+        return $this->cache()->get($key);
     }
 
     public function set($key, $value, $duration = null)
     {
-        return Yii::$app
-            ->get($this->cacheAlias)
-            ->set(
-                $key,
-                $value,
-                $duration,
-                $this->getDependency()
-            );
+        return $this->cache()->set(
+            $key,
+            $value,
+            $duration,
+            $this->getDependency()
+        );
+    }
+
+    public function exists(array $key): bool
+    {
+        return $this->cache()->exists($key);
+    }
+
+    public function delete(array $key): void
+    {
+        $this->cache()->delete($key);
+    }
+
+    protected function cache(): CacheInterface
+    {
+        return Yii::$app->get($this->cacheAlias);
     }
 }

@@ -17,4 +17,8 @@ interface RedisTaggedCache
     public function get(array $key);
 
     public function set(array $key, $value, $duration = null);
+
+    public function exists(array $key): bool;
+
+    public function delete(array $key): void;
 }
