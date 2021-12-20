@@ -23,6 +23,7 @@ class FrontSimple extends FrontItem
     public string     $reloadGridId       = '';
     public string     $dataMapper         = "['id']";
     public string     $mainContainerClass = 'core-popup-window';
+    public string     $modalSizeClass     = Modal::SIZE_LARGE;
     public string     $legend             = '';
     public ?bool      $pjaxLinkSelector   = false;
     public ?PanelBase $panel              = null;
@@ -149,7 +150,7 @@ class FrontSimple extends FrontItem
     {
         Modal::begin([
             'options' => ['class' => $this->mainContainerClass . ' fade ' . $modalClass],
-            'size'    => Modal::SIZE_LARGE,
+            'size'    => $this->modalSizeClass,
             'header'  => '<span class="modal-title panel-heading"></span>',
         ]);
         echo '<div id="' . $contentId . '" class="popover-content"></div>';

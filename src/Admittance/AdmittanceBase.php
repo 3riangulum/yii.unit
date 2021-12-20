@@ -8,9 +8,9 @@ use Yii;
 
 class AdmittanceBase implements Admittance
 {
-    private string $cacheAlias    = 'cache';
-    private int    $cacheDuration = 3600;
-    private string $roleRoot      = 'role-root';
+    public string $cacheAlias    = 'cache';
+    public int    $cacheDuration = 3600;
+    public string $roleRoot      = 'role-root';
 
     public function getUid(): int
     {
