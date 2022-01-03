@@ -4,7 +4,9 @@ namespace Triangulum\Yii\Unit\Admittance;
 
 use Exception;
 use Throwable;
+use Triangulum\Yii\Unit\Cache\RedisTaggedCache;
 use Yii;
+use yii\di\Instance;
 
 class AdmittanceBase implements Admittance
 {
@@ -21,7 +23,6 @@ class AdmittanceBase implements Admittance
             }
 
             return $uid;
-
         } catch (Throwable $t) {
             throw new Exception('Unauthorized access');
         }
@@ -39,7 +40,7 @@ class AdmittanceBase implements Admittance
 
     private function listUserPermissions(): array
     {
-        return Yii::$app->get($this->cacheAlias)->getOrSet(
+        return Instance::ensure($this->cacheAlias, RedisTaggedCache::class)->getOrSet(
             [__METHOD__, 'web', $this->getUid()],
             function () {
                 return array_fill_keys(

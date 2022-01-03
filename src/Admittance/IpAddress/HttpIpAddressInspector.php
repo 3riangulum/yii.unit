@@ -38,6 +38,11 @@ final class HttpIpAddressInspector extends BaseObject
         $this->allowedIp = $this->defineAllowedIp();
     }
 
+    public function getAllowedIp(): array
+    {
+        return $this->allowedIp;
+    }
+
     public function canIgnoreInspection(): bool
     {
         if (empty($this->ignoreParam) || empty($this->ignoreParamValue)) {

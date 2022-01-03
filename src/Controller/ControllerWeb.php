@@ -16,11 +16,10 @@ use yii\web\Response;
 
 class ControllerWeb extends Controller
 {
-    protected string $uri                   = '';
-    protected array  $csrfValidationExclude = [];
-    protected array  $jsonResponse          = [];
-    protected array  $accessRules           = [];
-    protected array  $verbActions           = [];
+    protected array $csrfValidationExclude = [];
+    protected array $jsonResponse          = [];
+    protected array $accessRules           = [];
+    protected array $verbActions           = [];
 
     protected ?Front $front      = null;
     protected string $frontClass = '';
@@ -28,10 +27,11 @@ class ControllerWeb extends Controller
     protected ?DbRepositoryAbstract $repository      = null;
     protected string                $repositoryClass = '';
 
-    public function init()
+    /**
+     * @throws BadRequestHttpException
+     */
+    public function beforeAction($action): bool
     {
-        parent::init();
-
         if (!empty($this->repositoryClass)) {
             /** @var DbRepositoryAbstract $repositoryClass */
             $repositoryClass = $this->repositoryClass;
@@ -43,13 +43,7 @@ class ControllerWeb extends Controller
             $frontClass = $this->frontClass;
             $this->front = $frontClass::build();
         }
-    }
 
-    /**
-     * @throws BadRequestHttpException
-     */
-    public function beforeAction($action): bool
-    {
         if (isset($this->jsonResponse[$action->id])) {
             Yii::$app->response->format = Response::FORMAT_JSON;
         }
@@ -59,14 +53,12 @@ class ControllerWeb extends Controller
         }
 
         if (!$this->accessRules) {
-            $this->accessRules = [$this->accessRuleDefault()];
+            $this->accessRules = $this->accessRuleDefault();
         }
 
         if (!$this->verbActions) {
             $this->verbActions = $this->verbActionsCrudDefault();
         }
-
-        $this->uri = $action->controller->id . '-' . $action->id;
 
         return parent::beforeAction($action);
     }
@@ -85,7 +77,7 @@ class ControllerWeb extends Controller
         ];
     }
 
-    protected function accessRuleDefault(array $actionList = []): array
+    protected function accessRuleDefault(): array
     {
         if (empty($ipWhite = Yii::$app->params['App.IpWhiteList'] ?? [])) {
             $default = [
@@ -99,11 +91,7 @@ class ControllerWeb extends Controller
             ];
         }
 
-        if ($actionList) {
-            $default['actions'] = $actionList;
-        }
-
-        return $default;
+        return [$default];
     }
 
     protected function verbActionsCrudDefault(): array
@@ -111,11 +99,6 @@ class ControllerWeb extends Controller
         return [
             RouteBase::ACTION_DELETE => ['POST'],
         ];
-    }
-
-    protected function getUri(): string
-    {
-        return $this->uri;
     }
 
     protected function renderThrowable(Throwable $t): string

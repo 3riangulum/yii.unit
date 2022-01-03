@@ -35,7 +35,7 @@ class RbacMigration extends Migration
             array_keys($this->permissionCreateMap),
         ]);
 
-        if (!empty($roleCreateMap)) {
+        if (!empty($this->roleCreateMap)) {
             $this->delete($this->authItemTable, [
                 'IN',
                 'name',
