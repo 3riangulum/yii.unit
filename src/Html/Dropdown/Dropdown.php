@@ -42,11 +42,15 @@ final class Dropdown
         $model,
         string         $attribute,
         FilterDropDown $filter,
-        bool           $randomId = false
+        bool           $randomId = false,
+        string         $width = '100%'
     ): ActiveField {
         $config = self::config($randomId);
         $config['initValueText'] = $filter->label($model->{$attribute});
         $config['pluginOptions']['data'] = $filter->items();
+        if ($width) {
+            $config['pluginOptions']['width'] = $width;
+        }
 
         return $form
             ->field($model, $attribute)
