@@ -14,7 +14,7 @@ class MenuItem
     public static function build(RouteBase $router, string $title, string $action): self
     {
         return Yii::createObject([
-            'class'  => self::class,
+            'class'  => static::class,
             'router' => $router,
             'title'  => $title,
             'action' => $action,
