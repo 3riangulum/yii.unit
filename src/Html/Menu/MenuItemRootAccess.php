@@ -3,9 +3,10 @@
 namespace Triangulum\Yii\Unit\Html\Menu;
 
 use Triangulum\Yii\Unit\Admittance\Admittance;
+use Triangulum\Yii\Unit\Admittance\RouteBase;
 
 /**
- * @method static self build
+ * @method static self build(RouteBase $router, string $title, string $action)
  */
 class MenuItemRootAccess extends MenuItem
 {
