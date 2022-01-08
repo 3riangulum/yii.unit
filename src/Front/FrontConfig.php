@@ -14,8 +14,8 @@ final class FrontConfig
     public string $deleteAction = '';
     public string $delete       = '';
     public string $gridClass    = '';
+    public string $gridId       = 'grid';
 
-    private string  $gridId       = 'grid';
     private string  $reloadGridId = '';
     private string  $dataMapper   = "['id']";
     private ?string $gridTag      = null;
