@@ -341,10 +341,13 @@ JS;
         return ActiveForm::begin($config);
     }
 
-    public function formPostBegin(string $alias = 'id')
+    public function formPostBegin(array $cfg = [])
     {
         $config = $this->formConfig($this->defineUrl());
         $config['method'] = 'POST';
+        if (!empty($cfg)) {
+            $config = ArrayHelper::merge($config, $cfg);
+        }
 
         return ActiveForm::begin($config);
     }
